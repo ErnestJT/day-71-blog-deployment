@@ -31,14 +31,10 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 
-# TODO: Configure Flask-Login
-
-
-# CREATE DATABASE
 class Base(DeclarativeBase):
     pass
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI','sqlite:///posts.db')
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
@@ -148,7 +144,7 @@ def register():
     return redirect(url_for('get_all_posts'))
 
 
-# TODO: Retrieve a user from the database based on their email. 
+# Retrieve a user from the database based on their email. 
 @app.route('/login', methods=['GET','POST'])
 def login():
     form = LoginForm()
@@ -184,7 +180,7 @@ def get_all_posts():
     return render_template("index.html", all_posts=posts)
 
 
-# TODO: Allow logged-in users to comment on posts
+# Allow logged-in users to comment on posts
 @app.route("/post/<int:post_id>", methods = ["GET","POST"])
 def show_post(post_id):
     requested_post = db.get_or_404(BlogPost, post_id)
@@ -209,7 +205,7 @@ def show_post(post_id):
     return redirect(url_for('show_post', post_id=post_id))
 
 
-# TODO: Use a decorator so only an admin user can create a new post
+
 
 
 @app.route("/new-post", methods=["GET", "POST"])
@@ -232,7 +228,7 @@ def add_new_post():
     return render_template("make-post.html", form=form)
 
 
-# TODO: Use a decorator so only an admin user can edit a post
+
 
 @admin_only
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
