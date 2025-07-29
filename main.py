@@ -4,7 +4,7 @@ from flask import Flask, abort, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from flask_gravatar import Gravatar
-from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
+from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user # type:ignore
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text, select, ForeignKey
@@ -81,6 +81,14 @@ class BlogPost(db.Model):
     body: Mapped[str] = mapped_column(Text, nullable=False)
     img_url: Mapped[str] = mapped_column(String(250), nullable=False)
     comments = relationship("Comment", back_populates="parent_post")
+    
+    def __init__(self,title,subtitle,body,img_url,author,date):
+        self.title = title
+        self.subtitle = subtitle
+        self.body = body
+        self.img_url = img_url
+        self.author = author
+        self.date = date
 
 class Comment(db.Model):
     __tablename__ = "comments"
